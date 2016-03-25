@@ -130,6 +130,10 @@ Anchor correct coordinates.
 * `right` Number
 * `bottom` Number
 
+### DropThemeBootstrap
+
+You can set your `Template.DropThemeBootstrap._indent = 15` for arrow depending on your rounding.
+
 ## Versions
 
 ### 0.0.1

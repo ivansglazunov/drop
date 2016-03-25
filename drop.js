@@ -352,3 +352,8 @@ Drop.Helper = {
 };
 
 Template.registerHelper('Drop', function() { return Drop.Helper; });
+
+Template.DropThemeBootstrap._indent = 15;
+Template.DropThemeBootstrap.helpers({
+    indent: function() { return Template.DropThemeBootstrap._indent; }
+});

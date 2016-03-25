@@ -34,7 +34,7 @@
 </template>
 
 <template name="DropThemeBootstrap">
-    <div class="popover {{_position.direction}}" style="display: block; opacity: 1; position: static; margin-{{_position.primaryKey}}: 10px; margin-{{Drop.invert _position.innerKey}}: -10px;">
+    <div class="popover {{_position.direction}}" style="display: block; opacity: 1; position: static; margin-{{_position.primaryKey}}: 10px; margin-{{Drop.invert _position.innerKey}}: -{{indent}}px;">
         <div class="arrow" style="position: absolute; {{_position.primaryKey}}: 0px; {{_position.secondaryKey}}: {{_position.arrow}}px;"></div>
         {{> UI.contentBlock}}
     </div>
