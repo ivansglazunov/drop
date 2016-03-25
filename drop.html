@@ -16,11 +16,26 @@
     <div class="templ-drop-instance" data-drop-instance="{{_id}}" style="{{#if _position.primaryValue}}{{_position.primaryKey}}: {{_position.primaryValue}}px; {{_position.secondaryKey}}: {{_position.secondaryValue}}px;{{else}}left: -999999999px; top: -99999999999px;{{/if}}; position: absolute; z-index: {{_position.layer}};">
         {{#if template}}
             {{#with data}}
-                {{# Template.dynamic template=template data=this}}
-                    {{> contentDrop}}
-                {{/ Template.dynamic}}
+                {{#if theme}}
+                    {{# Template.dynamic template=theme data=this}}
+                        {{# Template.dynamic template=(../template) data=(../../data)}}
+                            {{> contentDrop}}
+                        {{/ Template.dynamic}}
+                    {{/ Template.dynamic}}
+                {{else}}
+                    {{# Template.dynamic template=template data=this}}
+                        {{> contentDrop}}
+                    {{/ Template.dynamic}}
+                {{/if}}
             {{/with}}
         {{else}}
         {{/if}}
+    </div>
+</template>
+
+<template name="DropThemeBootstrap">
+    <div class="popover {{_position.direction}}" style="display: block; opacity: 1; position: static; margin-{{_position.primaryKey}}: 10px; margin-{{Drop.invert _position.innerKey}}: -10px;">
+        <div class="arrow" style="position: absolute; {{_position.primaryKey}}: 0px; {{_position.secondaryKey}}: {{_position.arrow}}px;"></div>
+        {{> UI.contentBlock}}
     </div>
 </template>

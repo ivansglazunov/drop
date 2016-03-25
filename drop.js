@@ -345,3 +345,10 @@ Template.DropInstance.helpers({
         return null;
     }
 });
+
+Drop.Helper = {
+    invert: function(key) { return Drop._invert[key]; },
+    isEqual: function() { return lodash.isEqual.apply(lodash, arguments); }
+};
+
+Template.registerHelper('Drop', function() { return Drop.Helper; });

@@ -135,3 +135,7 @@ Anchor correct coordinates.
 ### 0.0.1
 
 * `dropdown` and `popover` triggers.
+
+### 0.0.2
+
+* `DropThemeBootstrap` template
