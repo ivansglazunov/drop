@@ -129,3 +129,9 @@ Anchor correct coordinates.
 * `top` Number
 * `right` Number
 * `bottom` Number
+
+## Versions
+
+### 0.0.1
+
+* `dropdown` and `popover` triggers.
