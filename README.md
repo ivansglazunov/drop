@@ -110,6 +110,7 @@ Scheme of of possible data.
 * `template` (required) specifies a template for the drop
 * `trigger` (`toggle`) specifies trigger to this drop
 * `position` (`tcc`) specifies position or positions as (`t b r`)
+* `theme` (optional) template wrapper
 
 ### Position
 > Object
