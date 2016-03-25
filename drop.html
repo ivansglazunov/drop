@@ -1,0 +1,26 @@
+<template name="Drop">
+    {{! template: String}}
+    {{! trigger?: String = 'click'}}
+    {{! position?: String = 't'}}
+    {{> UI.contentBlock}}
+    {{setElseBlock UI.elseBlock}}
+</template>
+
+<template name="Drops">
+    {{#each drops}}
+        {{> DropInstance}}
+    {{/each}}
+</template>
+
+<template name="DropInstance">
+    <div class="templ-drop-instance" data-drop-instance="{{_id}}" style="{{#if _position.primaryValue}}{{_position.primaryKey}}: {{_position.primaryValue}}px; {{_position.secondaryKey}}: {{_position.secondaryValue}}px;{{else}}left: -999999999px; top: -99999999999px;{{/if}}; position: absolute; z-index: {{_position.layer}};">
+        {{#if template}}
+            {{#with data}}
+                {{# Template.dynamic template=template data=this}}
+                    {{> contentDrop}}
+                {{/ Template.dynamic}}
+            {{/with}}
+        {{else}}
+        {{/if}}
+    </div>
+</template>
