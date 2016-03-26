@@ -1,4 +1,4 @@
-# Drop
+# [Drop](http://templ.meteor.com/drop)
 
 Realy fully customizable, and reactive drops, dropdowns, tooltips and dropmenus for Meteor.
 
@@ -110,7 +110,7 @@ Scheme of of possible data.
 * `template` (required) specifies a template for the drop
 * `trigger` (`toggle`) specifies trigger to this drop
 * `position` (`tcc`) specifies position or positions as (`t b r`)
-* `theme` (optional) template wrapper
+* `theme` (`Drop._theme = undefined`) template wrapper
 
 ### Position
 > Object

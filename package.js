@@ -1,6 +1,6 @@
 Package.describe({
   name: 'templ:drop',
-  version: '0.0.4',
+  version: '0.0.5',
   summary: 'Dropdowns, dropmenus, tooltips as templates.',
   git: 'https://github.com/meteor-templ/drop',
   documentation: 'README.md'

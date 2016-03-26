@@ -15,19 +15,17 @@
 <template name="DropInstance">
     <div class="templ-drop-instance" data-drop-instance="{{_id}}" style="{{#if _position.primaryValue}}{{_position.primaryKey}}: {{_position.primaryValue}}px; {{_position.secondaryKey}}: {{_position.secondaryValue}}px;{{else}}left: -999999999px; top: -99999999999px;{{/if}}; position: absolute; z-index: {{_position.layer}};">
         {{#if template}}
-            {{#with data}}
-                {{#if theme}}
-                    {{# Template.dynamic template=theme data=this}}
-                        {{# Template.dynamic template=(../template) data=(../../data)}}
-                            {{> contentDrop}}
-                        {{/ Template.dynamic}}
+            {{#if theme}}
+                {{# Template.dynamic template=theme data=_data}}
+                    {{# Template.dynamic template=(../template) data=data}}
+                        {{> Template.dynamic template=contentDrop data=data}}
                     {{/ Template.dynamic}}
-                {{else}}
-                    {{# Template.dynamic template=template data=this}}
-                        {{> contentDrop}}
-                    {{/ Template.dynamic}}
-                {{/if}}
-            {{/with}}
+                {{/ Template.dynamic}}
+            {{else}}
+                {{# Template.dynamic template=template data=_data}}
+                    {{> Template.dynamic template=contentDrop data=data}}
+                {{/ Template.dynamic}}
+            {{/if}}
         {{else}}
         {{/if}}
     </div>

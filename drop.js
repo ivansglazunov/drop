@@ -44,6 +44,10 @@ Drop.InstanceSchema = new SimpleSchema({
             layer: { type: Number }
         }),
         optional: true
+    },
+    theme: {
+        type: String,
+        optional: true
     }
 });
 
@@ -229,6 +233,8 @@ Drop._position = function(name, anchor, instance) {
     return position;
 };
 
+Drop._theme = undefined;
+
 Drop._data = {};
 
 Drop._anchors = {};
@@ -256,7 +262,8 @@ Drop.show = function(anchor, data) {
     var instance = Drop.instances.insert({
         template: data.template,
         trigger: data.trigger,
-        position: data.position.split(' ')
+        position: data.position.split(' '),
+        theme: data.theme?data.theme:Drop._theme
     });
     Drop._data[instance] = data;
     Drop._anchors[data._anchorId].push(instance);
@@ -337,7 +344,7 @@ Template.DropInstance.onRendered(function() {
 });
 
 Template.DropInstance.helpers({
-    data: function() {
+    _data: function() {
         return lodash.merge(this, Drop._data[this._id]);
     },
     contentDrop: function() {
