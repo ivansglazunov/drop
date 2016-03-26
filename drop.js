@@ -348,7 +348,7 @@ Template.DropInstance.helpers({
         return lodash.merge(this, Drop._data[this._id]);
     },
     contentDrop: function() {
-        if (this.data && this.data._elseBlock) return this.data._elseBlock;
+        if (this._elseBlock) return this._elseBlock;
         return null;
     }
 });
