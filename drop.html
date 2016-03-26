@@ -18,12 +18,16 @@
             {{#if theme}}
                 {{# Template.dynamic template=theme data=_data}}
                     {{# Template.dynamic template=(../template) data=data}}
-                        {{> Template.dynamic template=contentDrop data=data}}
+                        {{#with data}}
+                            {{> contentDrop}}
+                        {{/with}}
                     {{/ Template.dynamic}}
                 {{/ Template.dynamic}}
             {{else}}
                 {{# Template.dynamic template=template data=_data}}
-                    {{> Template.dynamic template=contentDrop data=data}}
+                    {{#with data}}
+                        {{> contentDrop}}
+                    {{/with}}
                 {{/ Template.dynamic}}
             {{/if}}
         {{else}}
