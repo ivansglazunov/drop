@@ -113,7 +113,7 @@ You can set other plugin for momentum here.
 
 Scheme of of possible data.
 
-* `template` (required) specifies a template for the drop
+* `template` specifies a template for the drop
 * `trigger` (`toggle`) specifies trigger to this drop
 * `position` (`tcc`) specifies position or positions as (`t b r`)
 * `theme` (`Drop._theme = undefined`) template wrapper

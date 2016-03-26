@@ -33,6 +33,17 @@
                 {{/ Template.dynamic}}
             {{/if}}
         {{else}}
+            {{#if theme}}
+                {{# Template.dynamic template=theme data=_data}}
+                    {{#with data}}
+                        {{> contentDrop}}
+                    {{/with}}
+                {{/ Template.dynamic}}
+            {{else}}
+                {{#with data}}
+                    {{> contentDrop}}
+                {{/with}}
+            {{/if}}
         {{/if}}
     </div>
 </template>

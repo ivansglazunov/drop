@@ -18,8 +18,9 @@ Drop.InstanceSchema = new SimpleSchema({
     template: {
         type: String,
         custom: function() {
-            if (!(this.value in Template)) return 'notAllowed';
-        }
+            if (this.isSet && !(this.value in Template)) return 'notAllowed';
+        },
+        optional: true
     },
     trigger: {
         type: String
@@ -296,14 +297,15 @@ Drop.nesting.after.remove(function(userId, doc) {
 Drop.show = function(anchor, data) {
     var anchor = Drop.coordinates(anchor);
     var instance = Random.id();
+    data._id = instance;
     Drop._data[instance] = data;
     var _instance = {
         _id: instance,
-        template: data.template,
         trigger: data.trigger,
-        position: data.position.split(' '),
         theme: data.theme?data.theme:Drop._theme
     };
+    if (data.template) _instance.template = data.template;
+    if (data.position) _instance.position = data.position.split(' ');
     _instance._position = Drop._tick(_instance, anchor);
     Drop.instances.insert(_instance);
     Drop._anchors[data._anchorId].push(instance);
@@ -356,6 +358,14 @@ Drop.coordinates = function(anchor) {
     result.bottom = $(window).height() - result.height - result.top;
     return result;
 };
+
+Template.Drops.onRendered(function() {
+    $(window).on('resize scroll', function() {
+        lodash.each(Drop._data, function(drop) {
+            Drop.tick(drop._id, drop._anchor);
+        });
+    });
+});
 
 Template.Drop.onRendered(function() {
     if (!this.data.trigger) this.data.trigger = 'toggle';
