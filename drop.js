@@ -1,6 +1,6 @@
 Drop = Template.Drop;
 
-Drop._invert = { 'top': 'bottom', 'right': 'left', 'bottom': 'top', 'left': 'right', 'horizontal': 'vertical', 'vertical': 'horizontal', 'center': 'center', 'middle': 'middle' };
+Drop._invert = { 'top': 'bottom', 'right': 'left', 'bottom': 'top', 'left': 'right', 'horizontal': 'vertical', 'vertical': 'horizontal', 'center': 'center', 'middle': 'middle', 'X': 'Y', 'Y': 'X' };
 
 Drop._identity = { 't': 'top', 'r': 'right', 'b': 'bottom', 'l': 'left', 'm': 'middle', 'c': 'center' };
 
@@ -11,6 +11,8 @@ Drop._inpositions = { 'horizontal': 'left', 'vertical': 'top' };
 Drop._axisize = { 'horizontal': 'width', 'vertical': 'height' };
 
 Drop._numpositions = { 'left': 0, 'top': 0, 'center': 0.5, 'middle': 0.5, 'right': 1, 'bottom': 1 };
+
+Drop._to2d = { 'top': 1, 'bottom': -1, 'left': 1, 'right': -1 };
 
 Drop.InstanceSchema = new SimpleSchema({
     template: {
@@ -79,11 +81,44 @@ Drop._triggers.toggle = function() {
 Drop._triggers.tooltip = function() {
     var template = this;
     var instance;
+    
+    template.data._timeout = undefined;
+    
+    template.data._setTimeout = function() {
+        if (!template.data._timeout) {
+            template.data._timeout = Meteor.setTimeout(function() {
+                Drop.hide(instance);
+                instance = undefined;
+            }, 500);
+        }
+    };
+    
+    template.data._clearTimeout = function() {
+        Meteor.clearTimeout(template.data._timeout);
+        template.data._timeout = undefined;
+    };
+    
+    var timeouted;
+    
     $(template.data._anchor).hover(function() {
-        instance = Drop.show(template.data._anchor, template.data);
+        template.data._clearTimeout();
+        
+        timeouted = false;
+        setTimeout(function() {
+            timeouted = true;
+        }, 700);
+        
+        if (!instance) {
+            instance = Drop.show(template.data._anchor, template.data);
+        }
     }, function() {
-        Drop.hide(instance);
-        instance = undefined;
+        template.data._clearTimeout();
+        if (!timeouted) {
+            template.data._setTimeout();
+        } else {
+            Drop.hide(instance);
+            instance = undefined;
+        }
     });
 };
 
@@ -234,6 +269,7 @@ Drop._position = function(name, anchor, instance) {
 };
 
 Drop._theme = undefined;
+Drop._momentum = `dimentum`;
 
 Drop._data = {};
 
@@ -259,13 +295,17 @@ Drop.nesting.after.remove(function(userId, doc) {
 // (anchor: HTMLElement|Coordinates, data: Object) => instance: String
 Drop.show = function(anchor, data) {
     var anchor = Drop.coordinates(anchor);
-    var instance = Drop.instances.insert({
+    var instance = Random.id();
+    Drop._data[instance] = data;
+    var _instance = {
+        _id: instance,
         template: data.template,
         trigger: data.trigger,
         position: data.position.split(' '),
         theme: data.theme?data.theme:Drop._theme
-    });
-    Drop._data[instance] = data;
+    };
+    _instance._position = Drop._tick(_instance, anchor);
+    Drop.instances.insert(_instance);
     Drop._anchors[data._anchorId].push(instance);
     if (data.parent) {
         Drop.nesting.link.insert(Drop.instances.findOne(data.parent), Drop.instances.findOne(instance));
@@ -281,16 +321,22 @@ Drop.hide = function(instance) {
     Drop.instances.remove(instance);
 };
 
+// (instance: Document, anchor: Coordinates)
+Drop._tick = function(instance, anchor) {
+    var positions = {}
+    for (var p in instance.position) {
+        positions[instance.position[p]] = Drop._position(instance.position[p], anchor, instance);
+    }
+    var position = positions[instance.position[0]];
+    return position;
+};
+
 // (instance: String, anchor: HTMLElement|Coordinates)
 Drop.tick = function(instance, anchor) {
     var anchor = Drop.coordinates(anchor);
     var instance = Drop.instances.findOne(instance);
     if (instance) {
-        var positions = {}
-        for (var p in instance.position) {
-            positions[instance.position[p]] = Drop._position(instance.position[p], anchor, instance);
-        }
-        var position = positions[instance.position[0]];
+        var position = Drop._tick(instance, anchor);
         Drop.instances.update(instance._id, { $set: {
             '_position': position
         }});
@@ -330,6 +376,9 @@ Template.Drop.onDestroyed(function() {
 Template.Drops.helpers({
     drops: function() {
         return Drop.instances.find();
+    },
+    plugin: function() {
+        return Drop._momentum;
     }
 });
 
@@ -340,7 +389,7 @@ Template.Drop.helpers({
 });
 
 Template.DropInstance.onRendered(function() {
-    Drop.tick(this.data._id, this.data._anchor);
+    Drop.tick(this.data._id, Drop._data[this.data._id]._anchor);
 });
 
 Template.DropInstance.helpers({
@@ -350,11 +399,25 @@ Template.DropInstance.helpers({
     contentDrop: function() {
         if (this._elseBlock) return this._elseBlock;
         return null;
+    },
+    dimentum: function() {
+        var result = { inX: 0, inY: 0, outX: 0, outY: 0 };
+        var p = this._position;
+        if (p) {
+            result.inScaleX = [1, 0];
+            result.inScaleY = [1, 0];
+            var axis = (Drop._inaxys[p.direction] == 'horizontal'?'X':'Y');
+            result['in'+axis] += (Drop._to2d[p.direction] * 1.2);
+            result['in'+Drop._invert[axis]] += p.outerKey!=p.innerKey?(Drop._to2d[p.outerKey] * 1.2) + (Drop._to2d[p.innerKey] * 1.2):(Drop._to2d[p.outerKey] * 1.2);
+        }
+        return JSON.stringify(result);
     }
 });
 
 Drop.Helper = {
     invert: function(key) { return Drop._invert[key]; },
+    inaxys: function(key) { return Drop._inaxys[key]; },
+    inpositions: function(key) { return Drop._inpositions[key]; },
     isEqual: function() { return lodash.isEqual.apply(lodash, arguments); }
 };
 

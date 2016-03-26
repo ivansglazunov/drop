@@ -102,6 +102,12 @@ Recalculate and repositioning drop instance relative to the new anchor position.
 
 And all children will be repositioned as well.
 
+
+### Drop._momentum
+> String = 'dimentum'
+
+You can set other plugin for momentum here.
+
 ### Data
 > Object
 
@@ -136,6 +142,10 @@ Anchor correct coordinates.
 You can set your `Template.DropThemeBootstrap._indent = 15` for arrow depending on your rounding.
 
 ## Versions
+
+### 0.0.8
+* [Dimentum](https://github.com/meteor-templ/dimentum)
+* Many fixes...
 
 ### 0.0.1
 

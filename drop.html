@@ -7,13 +7,15 @@
 </template>
 
 <template name="Drops">
-    {{#each drops}}
-        {{> DropInstance}}
-    {{/each}}
+    {{#momentum plugin=plugin}}
+        {{#each drops}}
+            {{> DropInstance}}
+        {{/each}}
+    {{/momentum}}
 </template>
 
 <template name="DropInstance">
-    <div class="templ-drop-instance" data-drop-instance="{{_id}}" style="{{#if _position.primaryValue}}{{_position.primaryKey}}: {{_position.primaryValue}}px; {{_position.secondaryKey}}: {{_position.secondaryValue}}px;{{else}}left: -999999999px; top: -99999999999px;{{/if}}; position: absolute; z-index: {{_position.layer}};">
+    <div class="templ-drop-instance" data-drop-instance="{{_id}}" style="{{#if _position.primaryValue}}{{_position.primaryKey}}: {{_position.primaryValue}}px; {{_position.secondaryKey}}: {{_position.secondaryValue}}px;{{else}}left: -999999999px; top: -99999999999px;{{/if}}; position: absolute; z-index: {{_position.layer}};" data-dimentum="{{dimentum}}">
         {{#if template}}
             {{#if theme}}
                 {{# Template.dynamic template=theme data=_data}}
