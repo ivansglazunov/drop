@@ -377,6 +377,12 @@ Template.Drop.onRendered(function() {
     $(this.data._anchor).attr('data-drop-anchor', this.data._anchorId);
     
     Drop._triggers[this.data.trigger].call(this);
+    
+    $(this.data._anchor).on('dragstart drag dragstop', () => {
+        lodash.each(Drop._anchors[this.data._anchorId], (drop) => {
+            Drop.tick(drop, this.data._anchor);
+        });
+    });
 });
 
 Template.Drop.onDestroyed(function() {
