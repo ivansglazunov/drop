@@ -23,7 +23,8 @@ Drop.InstanceSchema = new SimpleSchema({
         optional: true
     },
     trigger: {
-        type: String
+        type: String,
+        optional: true
     },
     position: {
         type: [String],
@@ -66,43 +67,41 @@ Drop.nesting.selection = Shuttler.Selection(Drop.nesting, { source: 'source' })
 
 Drop._triggers = {};
 
-Drop._triggers.toggle = function() {
-    var template = this;
+Drop._triggers.toggle = function(data) {
     var instance;
-    $(template.data._anchor).click(function() {
+    $(data._anchor).click(function() {
         if (instance) {
             Drop.hide(instance);
             instance = undefined;
         } else {
-            instance = Drop.show(template.data._anchor, template.data);
+            instance = Drop.show(data);
         }
     });
 };
 
-Drop._triggers.tooltip = function() {
-    var template = this;
+Drop._triggers.tooltip = function(data) {
     var instance;
     
-    template.data._timeout = undefined;
+    data._timeout = undefined;
     
-    template.data._setTimeout = function() {
-        if (!template.data._timeout) {
-            template.data._timeout = Meteor.setTimeout(function() {
+    data._setTimeout = function() {
+        if (!data._timeout) {
+            data._timeout = Meteor.setTimeout(function() {
                 Drop.hide(instance);
                 instance = undefined;
             }, 500);
         }
     };
     
-    template.data._clearTimeout = function() {
-        Meteor.clearTimeout(template.data._timeout);
-        template.data._timeout = undefined;
+    data._clearTimeout = function() {
+        Meteor.clearTimeout(data._timeout);
+        data._timeout = undefined;
     };
     
     var timeouted;
     
-    $(template.data._anchor).hover(function() {
-        template.data._clearTimeout();
+    $(data._anchor).hover(function() {
+        data._clearTimeout();
         
         timeouted = false;
         setTimeout(function() {
@@ -110,12 +109,12 @@ Drop._triggers.tooltip = function() {
         }, 700);
         
         if (!instance) {
-            instance = Drop.show(template.data._anchor, template.data);
+            instance = Drop.show(data);
         }
     }, function() {
-        template.data._clearTimeout();
+        data._clearTimeout();
         if (!timeouted) {
-            template.data._setTimeout();
+            data._setTimeout();
         } else {
             Drop.hide(instance);
             instance = undefined;
@@ -123,58 +122,56 @@ Drop._triggers.tooltip = function() {
     });
 };
 
-Drop._triggers.dropmenu = function() {
-    var template = this;
+Drop._triggers.dropmenu = function(data) {
     var instance;
     
-    template.data._timeout = undefined;
+    data._timeout = undefined;
     
-    template.data._setTimeout = function() {
-        if (!template.data._timeout) {
-            template.data._timeout = Meteor.setTimeout(function() {
+    data._setTimeout = function() {
+        if (!data._timeout) {
+            data._timeout = Meteor.setTimeout(function() {
                 Drop.hide(instance);
                 instance = undefined;
             }, Drop._triggers.dropmenu.delay);
         }
     };
     
-    template.data._clearTimeout = function() {
-        Meteor.clearTimeout(template.data._timeout);
-        template.data._timeout = undefined;
+    data._clearTimeout = function() {
+        Meteor.clearTimeout(data._timeout);
+        data._timeout = undefined;
     };
     
-    template.data._watchInstance = function(instance) {
+    data._watchInstance = function(instance) {
         $('[data-drop-instance='+instance+']').hover(function() {
-            template.data._clearTimeout();
+            data._clearTimeout();
         }, function() {
-            template.data._setTimeout();
+            data._setTimeout();
         });
     };
     
-    $(template.data._anchor).hover(function() {
-        template.data._clearTimeout();
+    $(data._anchor).hover(function() {
+        data._clearTimeout();
         
         if (!instance) {
-            instance = Drop.show(template.data._anchor, template.data);
+            instance = Drop.show(data);
             
-            template.data._watchInstance(instance);
+            data._watchInstance(instance);
             
             var observer = Drop.nesting.links.find.source(instance, Drop.nesting.selection.selectedQuery()).observe({
                 added: function(nest) {
-                    template.data._watchInstance(nest._target.id);
+                    data._watchInstance(nest._target.id);
                 }
             });
         }
     }, function() {
-        template.data._setTimeout();
+        data._setTimeout();
     });
 };
 
-Drop._triggers.dropdown = function() {
-    var template = this;
+Drop._triggers.dropdown = function(data) {
     var instance;
     
-    template.data._hovered = false;
+    data._hovered = false;
     var anchorClick = false;
     
     $(document).click(function() {
@@ -182,39 +179,38 @@ Drop._triggers.dropdown = function() {
             anchorClick = false;
             return;
         }
-        if (instance && !template.data._hovered) {
+        if (instance && !data._hovered) {
             Drop.hide(instance);
             instance = undefined;
         }
     });
     
-    template.data._watchInstance = function(instance) {
+    data._watchInstance = function(instance) {
         $('[data-drop-instance='+instance+']').hover(function() {
-            template.data._hovered = true;
+            data._hovered = true;
         }, function() {
-            template.data._hovered = false;
+            data._hovered = false;
         });
     };
     
-    $(template.data._anchor).click(function() {
+    $(data._anchor).click(function() {
         if (!instance) {
             anchorClick = true;
             
-            instance = Drop.show(template.data._anchor, template.data);
+            instance = Drop.show(data);
             
-            template.data._watchInstance(instance);
+            data._watchInstance(instance);
             
             var observer = Drop.nesting.links.find.source(instance, Drop.nesting.selection.selectedQuery()).observe({
                 added: function(nest) {
-                    template.data._watchInstance(nest._target.id);
+                    data._watchInstance(nest._target.id);
                 }
             });
         }
     });
 };
 
-Drop._triggers.popover = function() {
-    var template = this;
+Drop._triggers.popover = function(data) {
     var instance;
     
     var anchorClick = false;
@@ -230,11 +226,11 @@ Drop._triggers.popover = function() {
         }
     });
     
-    $(template.data._anchor).click(function() {
+    $(data._anchor).click(function() {
         if (!instance) {
             anchorClick = true;
             
-            instance = Drop.show(template.data._anchor, template.data);
+            instance = Drop.show(data);
         }
     });
 };
@@ -293,9 +289,30 @@ Drop.nesting.after.remove(function(userId, doc) {
     Drop.instances.remove(doc._target.id);
 });
 
-// (anchor: HTMLElement|Coordinates, data: Object) => instance: String
-Drop.show = function(anchor, data) {
-    var anchor = Drop.coordinates(anchor);
+// (data: Object) => anchorId: String
+Drop.init = function(data) {
+    if (!data.trigger) data.trigger = 'toggle';
+    if (!data.position) data.position = 'tcc';
+    if (!data._anchorId) data._anchorId = Random.id();
+    
+    if (lodash.isElement(data._anchor)) {
+        $(data._anchor).attr('data-drop-anchor', data._anchorId);
+        
+        if (Drop._triggers[data.trigger]) Drop._triggers[data.trigger](data);
+        
+        $(data._anchor).on('dragstart drag dragstop', () => {
+            lodash.each(Drop._anchors[data._anchorId], (drop) => {
+                Drop.tick(drop, data._anchor);
+            });
+        });
+    }
+    
+    return data._anchorId;
+};
+
+// (data: Object) => instance: String
+Drop.show = function(data) {
+    var anchor = Drop.coordinates(data._anchor);
     var instance = Random.id();
     data._id = instance;
     Drop._data[instance] = data;
@@ -308,6 +325,7 @@ Drop.show = function(anchor, data) {
     if (data.position) _instance.position = data.position.split(' ');
     _instance._position = Drop._tick(_instance, anchor);
     Drop.instances.insert(_instance);
+    if (!Drop._anchors[data._anchorId]) Drop._anchors[data._anchorId] = [];
     Drop._anchors[data._anchorId].push(instance);
     if (data.parent) {
         Drop.nesting.link.insert(Drop.instances.findOne(data.parent), Drop.instances.findOne(instance));
@@ -348,9 +366,16 @@ Drop.tick = function(instance, anchor) {
 // (anchor: HTMLElement|Coordinates) => Coordinates
 Drop.coordinates = function(anchor) {
     if (lodash.isElement(anchor)) {
-        var $anchor = $(anchor);
-        var offset = $anchor.offset();
-        var result = { left: offset.left, top: offset.top, width: $anchor.outerWidth(), height: $anchor.outerHeight() };
+        if (anchor instanceof SVGElement) {
+            var box = anchor.getBBox();
+            var $svg = $(anchor).parent('svg');
+            var offset = $svg.offset();
+            var result = { left: box.x + offset.left, top: box.y + offset.top, width: box.width, height: box.height };
+        } else {
+            var $anchor = $(anchor);
+            var offset = $anchor.offset();
+            var result = { left: offset.left, top: offset.top, width: $anchor.outerWidth(), height: $anchor.outerHeight() };
+        }
     } else {
         var result = anchor;
     }
@@ -368,21 +393,9 @@ Template.Drops.onRendered(function() {
 });
 
 Template.Drop.onRendered(function() {
-    if (!this.data.trigger) this.data.trigger = 'toggle';
-    if (!this.data.position) this.data.position = 'tcc';
-    
-    this.data._anchor = this.$('>')[0];
-    this.data._anchorId = Random.id();
-    Drop._anchors[this.data._anchorId] = [];
-    $(this.data._anchor).attr('data-drop-anchor', this.data._anchorId);
-    
-    Drop._triggers[this.data.trigger].call(this);
-    
-    $(this.data._anchor).on('dragstart drag dragstop', () => {
-        lodash.each(Drop._anchors[this.data._anchorId], (drop) => {
-            Drop.tick(drop, this.data._anchor);
-        });
-    });
+    Drop.init(lodash.merge({
+        _anchor: this.$('>')[0]
+    }, this.data));
 });
 
 Template.Drop.onDestroyed(function() {
