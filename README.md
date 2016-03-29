@@ -154,6 +154,9 @@ The `theme` template uses Bootstrap classes.
 
 ## Versions
 
+### 0.2.5
+* Fix `hover`
+
 ### 0.2.2
 * Fix data bag
 

@@ -29,13 +29,13 @@ Drop.triggers.toggle = class extends Drop.Trigger {
 Drop.triggers.tooltip = class extends Drop.Trigger {
     constructor(drop) {
         super(drop);
-        this.mouseover = () => {
+        this.mouseenter = () => {
             this.clear();
             this.pause = true;
             Meteor.setTimeout(() => { this.pause = false; }, 500);
             drop.show();
         }
-        this.mouseout = () => {
+        this.mouseleave = () => {
             this.clear();
             if (this.pause) this.close();
             else drop.hide();
@@ -48,12 +48,12 @@ Drop.triggers.tooltip = class extends Drop.Trigger {
             Meteor.clearTimeout(this.timeout);
             delete this.timeout;
         }
-        $(drop.data.anchor).on('mouseover', this.mouseover);
-        $(drop.data.anchor).on('mouseout', this.mouseout);
+        $(drop.data.anchor).on('mouseenter', this.mouseenter);
+        $(drop.data.anchor).on('mouseleave', this.mouseleave);
     };
     destroy() {
-        $(this.drop.data.anchor).off('mouseover', this.mouseover);
-        $(this.drop.data.anchor).off('mouseout', this.mouseout);
+        $(this.drop.data.anchor).off('mouseenter', this.mouseenter);
+        $(this.drop.data.anchor).off('mouseleave', this.mouseleave);
     };
 };
 
@@ -66,7 +66,7 @@ Drop.triggers.dropmenu = class extends Drop.Trigger {
         this.watch = (_instance) => {
             $('[data-templ-drop='+_instance+']').hover(() => { this.clear(); }, () => { this.close(); });
         };
-        this.mouseover = () => {
+        this.mouseenter = () => {
             this.clear();
             if (!drop.data._instance) {
                 drop.show();
@@ -76,7 +76,7 @@ Drop.triggers.dropmenu = class extends Drop.Trigger {
                 });
             }
         }
-        this.mouseout = () => {
+        this.mouseleave = () => {
             this.clear();
             this.close();
         }
@@ -91,12 +91,12 @@ Drop.triggers.dropmenu = class extends Drop.Trigger {
             Meteor.clearTimeout(this.timeout);
             delete this.timeout;
         }
-        $(drop.data.anchor).on('mouseover', this.mouseover);
-        $(drop.data.anchor).on('mouseout', this.mouseout);
+        $(drop.data.anchor).on('mouseenter', this.mouseenter);
+        $(drop.data.anchor).on('mouseleave', this.mouseleave);
     };
     destroy() {
-        $(this.drop.data.anchor).off('mouseover', this.mouseover);
-        $(this.drop.data.anchor).off('mouseout', this.mouseout);
+        $(this.drop.data.anchor).off('mouseenter', this.mouseenter);
+        $(this.drop.data.anchor).off('mouseleave', this.mouseleave);
     };
 };
 
