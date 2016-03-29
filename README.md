@@ -1,4 +1,6 @@
-# [Drop](http://templ.meteor.com/drop)
+# Drop
+
+[Examples](http://templ.meteor.com/drop) [GitHub](https://github.com/meteor-templ/drop) [Atmosphere.js](atmospherejs.com/templ/drop)
 
 Realy fully customizable, and reactive drops, dropdowns, tooltips and dropmenus for Meteor.
 
@@ -8,151 +10,146 @@ Realy fully customizable, and reactive drops, dropdowns, tooltips and dropmenus 
 meteor add templ:drop
 ```
 
-## [Examples](http://templ.meteor.com/drop)
-
 ## Documentation
 
-### Template.Drops
+### Drop
+> new Drop(data: [Data](#data))
 
-Template print isntances of all drops.
+Class of one drop. Building automatically in the template [Template.Drop](#templatedrop).
 
-Be sure to place the root of the document.
+#### drop.tick
+> drop.tick(data: [Data](#data))
 
-```html
-<body>
-    {{> Drops}}
-</body>
-```
+It recalculates the position of drop, and merge old data with new data.
 
-### Template.Drop
-> (...data)
+#### drop.show
+> drop.show(data: [Data](#data))
 
-Template being declared around the anchor.
+It shows drop if hidden, and merge old data with new data.
 
-All possible arguments: [Data](#Data).
+#### drop.hide
+> drop.hide()
 
-It activates a specific trigger for a given drop. All its arguments are passed directly to the `data` argument to` Drop.show`.
+It hides drop if shown.
 
-```html
-<template name="dropper">
-    content
-</template>
-<template name="page">
-    {{#Drop template='dropper' trigger='tooltip' position='t'}}
-        <button>anchor</button>
-    {{/Drop}}
-</template>
-```
+#### drop.trigger
+> drop.trigger(name: String) => Drop.Trigger
 
-##### Content transfer.
+Construct and return trigger by name of trigger in `Drop.triggers` object.
 
-You can transfer a template in `else` block.
+#### drop.calc
+> drop.calc()
 
-```html
-<template name="dropper">
-    {{UI.contentBlock}}
-</template>
-<template name="page">
-    {{#Drop template='dropper' trigger='tooltip' position='t'}}
-        <button>anchor</button>
-    {{else}}
-        Tansfered content.
-    {{/Drop}}
-</template>
-```
-
-### Drop.init
-> ([data](#Data): Object) => anchor: String
-
-It activates a trigger for certain anchor. Scriptable initialization of drop.
-
-```html
-<template name="dropper">
-    content
-</template>
-<template name="page">
-    <button>anchor</button>
-</template>
-```
-
-```js
-Drop.init({ template: 'dropper', trigger: 'tooltip', position: 't', _anchor: $('button')[0] });
-```
-
-### Drop.show
-> ([data](#Data): Object) => instance: String
-
-Creates and shows a drop instance based on data positioning it to anchor.
-
-Returns the `instance: String` of the instance in the collection `Drop.instances`.
-
----
-
-Object `data` is available as context in template of drop instance.
-
-```html
-<template name="dropper">
-    {{content}}
-</template>
-<template name="page">
-    <button>anchor</button>
-</template>
-```
-
-```js
-Drop.show({ _anchor: $('button')[0], template: 'dropper', content: 'Example' });
-```
-
-### Drop.hide
-> (instance: String)
-
-Remove instance and all his children.
-
-### Drop.tick
-> (instance: String, anchor: Element|Coordinates)
-
-Recalculate and repositioning drop instance relative to the new anchor position.
-
-And all children will be repositioned as well.
-
-### Drop._momentum
-> String = 'dimentum'
-
-You can set other plugin for momentum here.
+Calculate instance keys and values.
 
 ### Data
-> Object
 
-Scheme of of possible data.
+Drop custom variables and drop options context.
 
-* `template: String` specifies a template for the drop
-* `trigger: String` (`toggle`) specifies trigger to this drop
-* `position: String` (`tcc`) specifies position or positions as (`t b r`)
-* `theme: String` (`Drop._theme = undefined`) template wrapper
-* `_anchor: Element|Coordinates` (required) pointer to the anchor of drop
+System variables:
 
-Variable `this` is almost the same in the `template`s, `theme`s and `else` blocks.
-It is always a document from collection `Drop.instances`.
-There is always the arguments passed in `data`.
-There is always useful for positioning data in `_position` variable.
+* `anchor: DOMELement` required link to anchor
+* `trigger: String` the trigger is activated automatically only when using [Template.Drop](#templatedrop)
+* `template: String` template of this drop
+* `content?: Template` template passed into template with [Template.Drop](#templatedrop) `{{else}}` block
+* `theme?: String = 'DropDefault'` theme template of this drop
+* `placement?: String = 'global'` placement drop into body root element or into called [Template.Drops](#templatedrops)
+* `location?: 'outside'|'inside'` visual location relative drop
+* `direction?: 'top'|'right'|'bottom'|'left' = 'top'` direction of drop
+* `position?: Number = 0.5` 0-1
+* `alignment?: Number = 0.5` 0-1
+* `layer?: Number = 9999` z-index of drop
 
-### Coordinates
-> Object
+### Drop.instances
+> Mongo.Collection
 
-The unified form of coordinates for anchor. It can be transmitted instead of the real element.
+Local collection with drop instances.
 
-* `width: Number`
-* `height: Number`
-* `left: Number`
-* `top: Number`
-* `right: Number`
-* `bottom: Number`
+> It is not recommended to make changes.
 
-### DropThemeBootstrap
 
-You can set your `Template.DropThemeBootstrap._indent = 15` for arrow depending on your rounding.
+### Drop.nesting
+> Mongo.Collection
+
+Local collection with [graph](https://github.com/meteor-shuttler/graph) of drop nesting.
+
+> It is not recommended to make changes.
+
+
+### Drop.triggers
+
+#### toggle
+> new Drop.triggers.toggle(drop: Drop)
+
+Anchor click to toggle drop.
+
+#### tooltip
+> new Drop.triggers.tooltip(drop: Drop)
+
+Anchor hover.
+
+#### dropmenu
+> new Drop.triggers.dropmenu(drop: Drop)
+
+Anchor and drop hover.
+
+#### dropdown
+> new Drop.triggers.dropdown(drop: Drop)
+
+Anchor click to show, outside click to hide.
+
+#### popover
+> new Drop.triggers.popover(drop: Drop)
+
+Anchor click to show, everywhere click to hide.
+
+### Template.Drop
+Template for easy automatic drop assembly.
+
+Inside, must be one root tag!
+
+It takes as arguments [Data](#data) object with anchor key.
+
+```html
+{{#Drop template='example'}}
+    <button>anchor</button>
+{{/Drop}}
+```
+
+As the `{{else}}` block can be passed `content` template variable.
+
+```html
+{{#Drop template='example'}}
+    <button>anchor</button>
+{{else}}
+    custom content
+{{/Drop}}
+```
+
+### Template.Drops
+It allows you to create an area for drops rendering.
+
+```html
+{{>Drops placement='myPlacement'}}
+{{#Drop template='example' placement='myPlacement'}}
+    <button>anchor</button>
+{{/Drop}}
+```
+
+### Template.DropDefault
+Standard independent `theme` template of drop.
+
+### Template.DropBootstrap
+The `theme` template uses Bootstrap classes.
 
 ## Versions
+
+### 0.2.0
+* New objective syntax
+* New reactive logic
+* New position-alignment logic
+* New location logic
+* New placement logic
 
 ### 0.1.0
 * Different API

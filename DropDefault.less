@@ -1,0 +1,60 @@
+.box-shadow(@shadow) {
+  -webkit-box-shadow: @shadow; // iOS <4.3 & Android <4.1
+          box-shadow: @shadow;
+}
+
+.triangle-base() {
+    content: '';
+    display: block;
+    width: 0;
+    height: 0;
+    -moz-transform: scale(.9999);
+}
+
+.templ-drop {
+    background-color: white;
+    .box-shadow(0 0 7px 0 fade(black, 30%));
+    border-radius: 2px;
+    margin: -5px;
+    &.templ-drop-top {
+        margin-bottom: 10px;
+    	.templ-drop-arrow:before {
+	        content: '▼';
+	        right: 7px;
+	        top: 4px;
+	        text-shadow: 0 2px 3px fade(black, 30%);
+    	}
+    }
+    &.templ-drop-right {
+        margin-left: 10px;
+    	.templ-drop-arrow:before {
+	        content: '◄';
+	        bottom: 7px;
+	        right: 1px;
+	        text-shadow: -2px 0 3px fade(black, 30%);
+    	}
+    }
+    &.templ-drop-bottom {
+        margin-top: 10px;
+    	.templ-drop-arrow:before {
+	        content: '▲';
+	        right: 7px;
+	        bottom: 4px;
+	        text-shadow: 0 -2px 3px fade(black, 30%);
+    	}
+    }
+    &.templ-drop-left {
+        margin-right: 10px;
+    	.templ-drop-arrow:before {
+	        content: '►';
+	        bottom: 7px;
+	        left: 1px;
+	        text-shadow: 2px 0 3px fade(black, 30%);
+    	}
+    }
+    .templ-drop-arrow:before {
+        font-size: 14px;
+        position: relative;
+        color: white;
+    }
+}

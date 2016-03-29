@@ -1,6 +1,6 @@
 Package.describe({
   name: 'templ:drop',
-  version: '0.1.0',
+  version: '0.2.0',
   summary: 'Dropdowns, dropmenus, tooltips as templates.',
   git: 'https://github.com/meteor-templ/drop',
   documentation: 'README.md'
@@ -19,11 +19,28 @@ Package.onUse(function(api) {
   api.use('stevezhu:lodash@4.6.1');
   api.use('aldeed:collection2@2.9.0');
   api.use('matb33:collection-hooks@0.8.1');
+  api.use('dburles:collection-helpers@1.0.4');
   api.use('templ:dimentum@0.0.1');
   api.use('shuttler:selection@0.0.5');
   
-  api.addFiles('drop.html', 'client');
-  api.addFiles('drop.js', 'client');
+  api.addFiles('class.js', 'client');
+  api.addFiles('triggers.js', 'client');
+  api.addFiles('instances.js', 'client');
+  api.addFiles('watch.js', 'client');
+  api.addFiles('Drop.html', 'client');
+  api.addFiles('Drop.js', 'client');
+  api.addFiles('Drops.html', 'client');
+  api.addFiles('Drops.js', 'client');
+  api.addFiles('body.html', 'client');
+  api.addFiles('helpers.js', 'client');
+  api.addFiles('Data.js', 'client');
+  api.addFiles('nesting.js', 'client');
+  
+  api.addFiles('DropDefault.html', 'client');
+  api.addFiles('DropDefault.less', 'client');
+  
+  api.addFiles('DropBootstrap.html', 'client');
+  api.addFiles('DropBootstrap.less', 'client');
   
   api.export('Drop');
 });

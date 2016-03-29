@@ -1,0 +1,10 @@
+<template name="Drop">
+    {{setContent UI.elseBlock}}
+    {{# DropCore id=id data=this}}
+        {{> UI.contentBlock}}
+    {{/ DropCore}}
+</template>
+
+<template name="DropCore">
+    {{> UI.contentBlock}}
+</template>

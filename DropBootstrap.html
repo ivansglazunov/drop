@@ -1,0 +1,6 @@
+<template name="DropBootstrap">
+    <div class="popover {{instance.arrowDirection}} templ-drop-bootstrap" style="display: block; opacity: 1; position: static; margin-{{instance.directionKey}}: 10px;">
+        <div class="arrow" style="position: absolute; {{instance.directionKey}}: 0px; {{instance.additionalKey}}: {{instance.arrowValue}}px;"></div>
+        {{> UI.contentBlock}}
+    </div>
+</template>
