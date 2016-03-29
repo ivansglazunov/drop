@@ -44,7 +44,6 @@ Drop.instances.helpers({
         result.inScaleY = [1, 0];
         var axis = (this.direction in ['left', 'right']?'X':'Y');
         result['in'+axis] += (_to2d[this.arrowDirection()] * 2);
-        console.log(result);
         return JSON.stringify(result);
     }
 });
