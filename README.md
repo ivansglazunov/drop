@@ -1,6 +1,6 @@
 # Drop
 
-[Examples](http://templ.meteor.com/drop) [GitHub](https://github.com/meteor-templ/drop) [Atmosphere.js](atmospherejs.com/templ/drop)
+[Examples](http://meteor-templ.herokuapp.com/drop) [GitHub](https://github.com/meteor-templ/drop) [Atmosphere.js](atmospherejs.com/templ/drop)
 
 Realy fully customizable, and reactive drops, dropdowns, tooltips and dropmenus for Meteor.
 
