@@ -23,5 +23,5 @@ Template.DropsInstance.onRendered(function() {
 
 // Remove initialized instance from drop.
 Template.DropsInstance.onDestroyed(function() {
-    delete this.data.drop().instance;
+    if (this.data.drop()) delete this.data.drop().instance;
 });

@@ -1,6 +1,6 @@
 Package.describe({
   name: 'templ:drop',
-  version: '0.2.1',
+  version: '0.2.2',
   summary: 'Dropdowns, dropmenus, tooltips as templates.',
   git: 'https://github.com/meteor-templ/drop',
   documentation: 'README.md'
@@ -41,6 +41,8 @@ Package.onUse(function(api) {
   
   api.addFiles('DropBootstrap.html', 'client');
   api.addFiles('DropBootstrap.less', 'client');
+  
+  api.addFiles('DropDefaultTemplate.html', 'client');
   
   api.export('Drop');
 });

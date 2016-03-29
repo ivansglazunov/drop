@@ -2,8 +2,14 @@
 // They store only calculated data needed to rendering.
 Drop.instances = new Mongo.Collection(null, { ref: 'templ:drop/instances' });
 Drop.instances.attachSchema(new SimpleSchema({
-    template: { type: String },
-    theme: { type: String, optional: true, defaultValue: 'DropDefault' },
+    template: {
+        type: String, optional: true,
+        autoValue: function() { if (!this.value) return Drop._template; }
+    },
+    theme: {
+        type: String, optional: true,
+        autoValue: function() { if (!this.value) return Drop._theme; }
+    },
     placement: { type: String },
     direction: { type: String, optional: true },
     layer: { type: Number, optional: true, defaultValue: 9999 },

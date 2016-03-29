@@ -17,6 +17,16 @@ meteor add templ:drop
 
 Class of one drop. Building automatically in the template [Template.Drop](#templatedrop).
 
+#### Drop._theme
+> String = 'DropDefault'
+
+Default theme.
+
+#### Drop._template
+> String = 'DropDefaultTemplate'
+
+Default template.
+
 #### drop.tick
 > drop.tick(data: [Data](#data))
 
@@ -50,7 +60,7 @@ System variables:
 
 * `anchor: DOMELement` required link to anchor
 * `trigger: String` the trigger is activated automatically only when using [Template.Drop](#templatedrop)
-* `template: String` template of this drop
+* `template?: String = 'DropDefaultTemplate'` template of this drop
 * `content?: Template` template passed into template with [Template.Drop](#templatedrop) `{{else}}` block
 * `theme?: String = 'DropDefault'` theme template of this drop
 * `placement?: String = 'global'` placement drop into body root element or into called [Template.Drops](#templatedrops)
@@ -143,6 +153,9 @@ Standard independent `theme` template of drop.
 The `theme` template uses Bootstrap classes.
 
 ## Versions
+
+### 0.2.2
+* Fix data bag
 
 ### 0.2.0
 * New objective syntax

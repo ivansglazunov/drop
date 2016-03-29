@@ -12,6 +12,10 @@ Drop = function(data) {
     this.tick(data);
 };
 
+// Default values
+Drop._theme = 'DropDefault';
+Drop._template = 'DropDefaultTemplate';
+
 // It recalculates the position of drop, and merge old data with new data.
 // drop.tick(data?: Data)
 Drop.prototype.tick = function(data) {
@@ -130,8 +134,8 @@ Drop.prototype.calc = function() {
         result.positionValue = typeof(this.data.position) == 'number'?this.data.position:0.5;
         result.alignmentValue = typeof(this.data.alignment) == 'number'?this.data.alignment:0.5;
         
-        result.width = $(this.instance).outerWidth();
-        result.height = $(this.instance).outerHeight();
+        result.width = $(this.instance).width();
+        result.height = $(this.instance).height();
         
         // Calculate currect drop coordinates seeing position and alignment.
         result.additionalValue =
