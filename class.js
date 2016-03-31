@@ -35,7 +35,7 @@ Drop.prototype.tick = function(data) {
         if (this.data._instance) {
             Drop.instances.update(
                 this.data._instance,
-                { $set: this.calc() }
+                { $set: this.generateInstance() }
             );
         }
     }
@@ -60,7 +60,7 @@ Drop.prototype.show = function(data) {
         this.data._instance = Drop.instances.insert(
             lodash.merge({
                 _id: _id
-            }, this.calc())
+            }, this.generateInstance())
         );
         
         if (this.data.parent && this.data.parent._instance) {
@@ -90,23 +90,19 @@ Drop.prototype.trigger = function(name) {
         return new Drop.triggers[name](this);
 }
 
-// Calculate instance keys and values.
+// Generate instance keys and values.
 // Need for this.data._anchor field.
-// drop.calc() => Object
-Drop.prototype.calc = function() {
+// drop.generateInstance() => Object
+Drop.prototype.generateInstance = function() {
     var result = {};
     
-    // Reactive template and theme switch
-    if (this.data.theme) result.theme = this.data.theme;
-    if (this.data.template) result.template = this.data.template;
-    
-    // Placement can be changed.
-    result.placement = this.data.placement?this.data.placement:'global';
-    
-    result.direction = this.data.direction?this.data.direction:'top';
+    // Reactive drop states
+    lodash.each(['template', 'theme', 'placement', 'direction', 'layer'], (key) => {
+        if (key in this.data) result[key] = this.data[key];
+    });
     
     // Positioning of drop instance without knowledge about size of drop.
-    
+    // Only one of two axis.
     if (this.data.location == 'outside') {
         result.directionKey = Drop.invert(result.direction);
         result.directionValue = this.data._anchor[result.directionKey] + this.data._anchor[Drop.insize(result.directionKey)];
@@ -115,21 +111,15 @@ Drop.prototype.calc = function() {
         result.directionValue = this.data._anchor[result.directionKey];
     }
     
-    // For example if direction is top then additional is left.
+    // Direction of second axis.
     result.additionalKey = Drop.rotate(result.directionKey);
+    // For example if direction is top then additional is left.
     
     // It is important! On first calling for instance, template is not yet rendered.
     // Should be safe to display drop but not show it.
     
-    if (!this.instance) {
-        
-        // Print off the screen for a moment
-        result.directionKey = 'top';
-        result.directionValue = -9999999;
-        result.additionalKey = 'left';
-        result.additionalValue = -9999999;
-        
-    } else {
+    if (this.instance) {
+        // Instance already rendered.
         
         result.positionValue = typeof(this.data.position) == 'number'?this.data.position:0.5;
         result.alignmentValue = typeof(this.data.alignment) == 'number'?this.data.alignment:0.5;

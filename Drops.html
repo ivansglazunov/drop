@@ -5,9 +5,7 @@
 </template>
 
 <template name="DropsInstance">
-    <div data-templ-drop="{{_id}}" style="z-index:{{layer}};position:absolute;{{directionKey}}:{{directionValue}}px;{{additionalKey}}:{{additionalValue}}px;">
-        {{# Template.dynamic template=theme data=drop.data}}
-            {{> Template.dynamic template=../template data=../drop.data}}
-        {{/ Template.dynamic}}
-    </div>
+    {{# Template.dynamic template=theme data=drop.data}}
+        {{> Template.dynamic template=../template data=../drop.data}}
+    {{/ Template.dynamic}}
 </template>

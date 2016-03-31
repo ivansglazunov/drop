@@ -17,7 +17,7 @@ Template.DropsInstance.helpers({
 
 // Initialize one instance in drop.
 Template.DropsInstance.onRendered(function() {
-    this.data.drop().instance = this.$('>')[0];
+    this.data.drop().instance = $('[data-templ-drop='+this.data._id+']')[0];
     this.data.drop().tick();
 });
 

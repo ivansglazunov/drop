@@ -47,10 +47,10 @@ It hides drop if shown.
 
 Construct and return trigger by name of trigger in `Drop.triggers` object.
 
-#### drop.calc
-> drop.calc()
+#### drop.generateInstance
+> drop.generateInstance()
 
-Calculate instance keys and values.
+Generate instance.
 
 ### Data
 

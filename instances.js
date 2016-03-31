@@ -2,6 +2,7 @@
 // They store only calculated data needed to rendering.
 Drop.instances = new Mongo.Collection(null, { ref: 'templ:drop/instances' });
 Drop.instances.attachSchema(new SimpleSchema({
+    // templating settings
     template: {
         type: String, optional: true,
         autoValue: function() { if (!this.value) return Drop._template; }
@@ -10,17 +11,30 @@ Drop.instances.attachSchema(new SimpleSchema({
         type: String, optional: true,
         autoValue: function() { if (!this.value) return Drop._theme; }
     },
-    placement: { type: String },
-    direction: { type: String, optional: true },
+    placement: { type: String, optional: true, defaultValue: 'global' },
+    direction: { type: String, optional: true, defaultValue: 'top' },
     layer: { type: Number, optional: true, defaultValue: 9999 },
+    
+    // prepare fields
     directionKey: { type: String, optional: true },
     directionValue: { type: Number, decimal: true, optional: true },
     additionalKey: { type: String, optional: true },
     additionalValue: { type: Number, decimal: true, optional: true },
+    
+    // unprepare fields
     positionValue: { type: Number, decimal: true, optional: true },
     alignmentValue: { type: Number, decimal: true, optional: true },
     width: { type: Number, decimal: true, optional: true },
-    height: { type: Number, decimal: true, optional: true }
+    height: { type: Number, decimal: true, optional: true },
+    
+    // prepare state
+    prepare: {
+        type: Boolean, optional: true,
+        autoValue: function() {
+            if (this.isInsert) return true;
+            else if (this.isUpdate && !this.value) return false;
+        }
+    }
 }));
 
 Drop.instances.helpers({
@@ -52,7 +66,7 @@ Drop.instances.find({}).observe({
                     Drop._instances[newInstance._id].tick();
                 }
             }
-        }, 50);
+        }, 0);
     }
 });
 
