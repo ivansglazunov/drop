@@ -23,8 +23,6 @@ Drop.instances.attachSchema(new SimpleSchema({
     height: { type: Number, decimal: true, optional: true }
 }));
 
-var _to2d = { 'top': 1, 'bottom': -1, 'left': 1, 'right': -1 };
-
 Drop.instances.helpers({
     drop: function() {
         return Drop._instances[this._id];
@@ -37,14 +35,6 @@ Drop.instances.helpers({
     },
     arrowValue: function() {
         return this.alignmentValue * this[Drop.insize(this.additionalKey)];
-    },
-    dimentum: function() {
-        var result = { inX: 0, inY: 0, outX: 0, outY: 0 };
-        result.inScaleX = [1, 0];
-        result.inScaleY = [1, 0];
-        var axis = (this.direction in ['left', 'right']?'X':'Y');
-        result['in'+axis] += (_to2d[this.arrowDirection()] * 2);
-        return JSON.stringify(result);
     }
 });
 
