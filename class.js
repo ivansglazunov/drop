@@ -135,6 +135,5 @@ Drop.prototype.generateInstance = function() {
             );
     }
     
-    console.log(result);
     return result;
 };

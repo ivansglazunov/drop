@@ -43,5 +43,7 @@ Package.onUse(function(api) {
   
   api.addFiles('DropDefaultTemplate.html', 'client');
   
+  api.addFiles('Drop.less', 'client');
+  
   api.export('Drop');
 });

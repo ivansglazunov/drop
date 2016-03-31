@@ -1,5 +1,5 @@
 <template name="DropBootstrap">
-    <div style="z-index:{{instance.layer}};position:absolute;{{instance.directionKey}}:{{instance.directionValue}}px;{{instance.additionalKey}}:{{instance.additionalValue}}px;" data-templ-drop="{{_instance}}">
+    <div style="z-index:{{instance.layer}};position:absolute;{{instance.directionKey}}:{{instance.directionValue}}px;{{instance.additionalKey}}:{{instance.additionalValue}}px;" data-templ-drop="{{_instance}}" class="{{#if instance.prepare}}-templ-drop-prepare{{/if}}">
         <div class="popover {{instance.arrowDirection}} templ-drop-bootstrap" style="display: block; opacity: 1; position: static; margin-{{instance.directionKey}}: 10px;">
             <div class="arrow" style="position: absolute; {{instance.directionKey}}: 0px; {{instance.additionalKey}}: {{instance.arrowValue}}px;"></div>
             {{> UI.contentBlock}}

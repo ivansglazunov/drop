@@ -32,7 +32,11 @@ Drop.instances.attachSchema(new SimpleSchema({
         type: Boolean, optional: true,
         autoValue: function() {
             if (this.isInsert) return true;
-            else if (this.isUpdate && !this.value) return false;
+            else if (this.isUpdate) {
+                if (Drop.instances.findOne(this.docId).prepare) {
+                    return false;
+                }
+            }
         }
     }
 }));
@@ -52,21 +56,21 @@ Drop.instances.helpers({
     }
 });
 
+Drop.instances.before.update(function(userId, doc, fieldNames, modifier, options) {
+    if (lodash.includes(fieldNames, 'theme') && lodash.includes(fieldNames, 'template') && lodash.includes(fieldNames, 'direction') && lodash.includes(fieldNames, 'placement')) {
+        if(!('$set' in modifier)) modifier.$set = {};
+        modifier.$set.prepare = true;
+    }
+});
+
 // Insurance changes in drop size.
 Drop.instances.find({}).observe({
     changed: function(newInstance, oldInstance) {
-        Meteor.setTimeout(function() {
-            if (Drop._instances[newInstance._id]) {
-                var $drop = $(Drop._instances[newInstance._id].instance);
-                if (
-                    (oldInstance.width > $drop.width() + 5 || oldInstance.width < $drop.width() - 5)
-                    ||
-                    (oldInstance.height > $drop.height() + 5 || oldInstance.height < $drop.height() - 5)
-                ) {
-                    Drop._instances[newInstance._id].tick();
-                }
-            }
-        }, 0);
+        if (newInstance.prepare) {
+            Meteor.setTimeout(function() {
+                Drop._instances[newInstance._id].tick();
+            }, 0);
+        }
     }
 });
 
