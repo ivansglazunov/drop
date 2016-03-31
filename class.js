@@ -117,15 +117,14 @@ Drop.prototype.generateInstance = function() {
     
     // It is important! On first calling for instance, template is not yet rendered.
     // Should be safe to display drop but not show it.
-    
-    if (this.instance) {
+    if (this.data._instance) {
         // Instance already rendered.
         
         result.positionValue = typeof(this.data.position) == 'number'?this.data.position:0.5;
         result.alignmentValue = typeof(this.data.alignment) == 'number'?this.data.alignment:0.5;
         
-        result.width = $(this.instance).width();
-        result.height = $(this.instance).height();
+        result.width = $('[data-templ-drop='+this.data._instance+']').width();
+        result.height = $('[data-templ-drop='+this.data._instance+']').height();
         
         // Calculate currect drop coordinates seeing position and alignment.
         result.additionalValue =
@@ -136,5 +135,6 @@ Drop.prototype.generateInstance = function() {
             );
     }
     
+    console.log(result);
     return result;
 };

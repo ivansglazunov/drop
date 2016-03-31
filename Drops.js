@@ -17,11 +17,5 @@ Template.DropsInstance.helpers({
 
 // Initialize one instance in drop.
 Template.DropsInstance.onRendered(function() {
-    this.data.drop().instance = $('[data-templ-drop='+this.data._id+']')[0];
     this.data.drop().tick();
-});
-
-// Remove initialized instance from drop.
-Template.DropsInstance.onDestroyed(function() {
-    if (this.data.drop()) delete this.data.drop().instance;
 });
