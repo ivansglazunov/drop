@@ -20,6 +20,7 @@ Package.onUse(function(api) {
   api.use('aldeed:collection2@2.9.0');
   api.use('matb33:collection-hooks@0.8.1');
   api.use('dburles:collection-helpers@1.0.4');
+  api.use('templ:dimentum@0.0.3');
   api.use('shuttler:selection@0.0.5');
   
   api.addFiles('class.js', 'client');

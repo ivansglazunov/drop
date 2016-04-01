@@ -5,13 +5,10 @@ Template.Drops.helpers({
         return Drop.instances.find({
             placement: this.placement
         });
-    }
-});
-
-Template.DropsInstance.helpers({
-    contentDrop: function() {
-        if (this.drop() && this.drop().data.content) return this.drop().data.content;
-        return null;
+    },
+    
+    plugin: function() {
+        return Drop._momentum;
     }
 });
 

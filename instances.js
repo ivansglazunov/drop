@@ -32,11 +32,6 @@ Drop.instances.attachSchema(new SimpleSchema({
         type: Boolean, optional: true,
         autoValue: function() {
             if (this.isInsert) return true;
-            else if (this.isUpdate) {
-                if (Drop.instances.findOne(this.docId).prepare) {
-                    return false;
-                }
-            }
         }
     }
 }));
@@ -57,19 +52,18 @@ Drop.instances.helpers({
 });
 
 Drop.instances.before.update(function(userId, doc, fieldNames, modifier, options) {
-    if (lodash.includes(fieldNames, 'theme') && lodash.includes(fieldNames, 'template') && lodash.includes(fieldNames, 'direction') && lodash.includes(fieldNames, 'placement')) {
-        if(!('$set' in modifier)) modifier.$set = {};
-        modifier.$set.prepare = true;
+    if(!('$set' in modifier)) modifier.$set = {};
+    if (!lodash.includes(fieldNames, 'prepare')) {
+        modifier.$set.prepare = false;
     }
 });
 
-// Insurance changes in drop size.
-Drop.instances.find({}).observe({
-    changed: function(newInstance, oldInstance) {
-        if (newInstance.prepare) {
-            Meteor.setTimeout(function() {
-                Drop._instances[newInstance._id].tick();
-            }, 0);
+var keys = ['template', 'theme', 'placement', 'direction', 'layer'];
+Drop.instances.after.update(function(userId, doc, fieldNames, modifier, options) {
+    for (var k in keys) {
+        if (this.previous[keys[k]] != doc[keys[k]]) {
+            Drop.instances._transform(doc).drop().hide().show();
+            break;
         }
     }
 });

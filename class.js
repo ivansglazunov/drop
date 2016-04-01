@@ -15,9 +15,10 @@ Drop = function(data) {
 // Default values
 Drop._theme = 'DropDefault';
 Drop._template = 'DropDefaultTemplate';
+Drop._momentum = 'dimentum';
 
 // It recalculates the position of drop, and merge old data with new data.
-// drop.tick(data?: Data)
+// drop.tick(data?: Data) => Drop
 Drop.prototype.tick = function(data) {
     if (data) {
         lodash.mergeWith(this.data, data, function(dst, src, key) {
@@ -39,11 +40,13 @@ Drop.prototype.tick = function(data) {
             );
         }
     }
+    
+    return this;
 };
 
 // It shows drop if hidden, and merge old data with new data.
 // Need for this.data.anchor field.
-// drop.show(data?: Data)
+// drop.show(data?: Data) => Drop
 Drop.prototype.show = function(data) {
     
     if (!this.data.anchor)
@@ -73,14 +76,18 @@ Drop.prototype.show = function(data) {
     
     // Reset data.
     this.tick(data);
+    
+    return this;
 };
 
 // It hides drop if shown.
-// drop.hide()
+// drop.hide() => Drop
 Drop.prototype.hide = function() {
     if (this.data._instance) {
         Drop.instances.remove(this.data._instance);
     }
+    
+    return this;
 };
 
 // Construct and return trigger by name of trigger in `Drop.triggers` object.
@@ -94,11 +101,14 @@ Drop.prototype.trigger = function(name) {
 // Need for this.data._anchor field.
 // drop.generateInstance() => Object
 Drop.prototype.generateInstance = function() {
+    var instance = this.data.instance();
     var result = {};
-    
     // Reactive drop states
     lodash.each(['template', 'theme', 'placement', 'direction', 'layer'], (key) => {
-        if (key in this.data) result[key] = this.data[key];
+        if (key in this.data) {
+            result[key] = this.data[key];
+            if (instance && result[key] != instance[key]) result.prepare = true;
+        }
     });
     
     // Positioning of drop instance without knowledge about size of drop.

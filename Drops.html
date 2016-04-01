@@ -1,11 +1,13 @@
 <template name="Drops">
-    {{#each drops}}
-        {{> DropsInstance}}
-    {{/each}}
+    {{#momentum plugin=plugin}}
+        {{#each drops}}
+            {{> DropsInstance}}
+        {{/each}}
+    {{/momentum}}
 </template>
 
 <template name="DropsInstance">
-    {{# Template.dynamic template=theme data=drop.data}}
-        {{> Template.dynamic template=../template data=../drop.data}}
+    {{# Template.dynamic template=theme data=this}}
+        {{> Template.dynamic template=data.template data=data.drop.data}}
     {{/ Template.dynamic}}
 </template>

@@ -1,7 +1,7 @@
 <template name="DropDefault">
-    <div style="z-index:{{instance.layer}};position:absolute;{{instance.directionKey}}:{{instance.directionValue}}px;{{instance.additionalKey}}:{{instance.additionalValue}}px;" data-templ-drop="{{_instance}}" class="{{#if instance.prepare}}-templ-drop-prepare{{/if}}">
-        <div class="templ-drop templ-drop-{{instance.arrowDirection}}">
-            <div class="templ-drop-arrow" style="position: absolute; {{instance.directionKey}}: 0px; {{instance.additionalKey}}: {{instance.arrowValue}}px;"></div>
+    <div style="z-index:{{layer}};position:absolute;{{directionKey}}:{{directionValue}}px;{{additionalKey}}:{{additionalValue}}px;" data-templ-drop="{{_id}}" class="{{#if prepare}}-templ-drop-prepare{{/if}}" data-dimentum="{{directionKey}}">
+        <div class="templ-drop templ-drop-{{arrowDirection}}">
+            <div class="templ-drop-arrow" style="position: absolute; {{directionKey}}: 0px; {{additionalKey}}: {{arrowValue}}px;"></div>
             {{> UI.contentBlock}}
         </div>
     </div>
