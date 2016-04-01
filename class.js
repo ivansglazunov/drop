@@ -104,7 +104,7 @@ Drop.prototype.generateInstance = function() {
     var instance = this.data.instance();
     var result = {};
     // Reactive drop states
-    lodash.each(['template', 'theme', 'placement', 'direction', 'layer'], (key) => {
+    lodash.each(['template', 'theme', 'placement', 'direction', 'layer', 'location'], (key) => {
         if (key in this.data) {
             result[key] = this.data[key];
             if (instance && result[key] != instance[key]) result.prepare = true;

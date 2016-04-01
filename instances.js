@@ -12,13 +12,14 @@ Drop.instances.attachSchema(new SimpleSchema({
         autoValue: function() { if (!this.value) return Drop._theme; }
     },
     placement: { type: String, optional: true, defaultValue: 'global' },
-    direction: { type: String, optional: true, defaultValue: 'top' },
+    location: { type: String, optional: true, defaultValue: 'outside', allowedValues: ['outside', 'inside'] },
+    direction: { type: String, optional: true, defaultValue: 'top', allowedValues: ['top', 'right', 'bottom', 'left'] },
     layer: { type: Number, optional: true, defaultValue: 9999 },
     
     // prepare fields
-    directionKey: { type: String, optional: true },
+    directionKey: { type: String, optional: true, allowedValues: ['top', 'right', 'bottom', 'left'] },
     directionValue: { type: Number, decimal: true, optional: true },
-    additionalKey: { type: String, optional: true },
+    additionalKey: { type: String, optional: true, allowedValues: ['top', 'right', 'bottom', 'left'] },
     additionalValue: { type: Number, decimal: true, optional: true },
     
     // unprepare fields
@@ -58,7 +59,7 @@ Drop.instances.before.update(function(userId, doc, fieldNames, modifier, options
     }
 });
 
-var keys = ['template', 'theme', 'placement', 'direction', 'layer'];
+var keys = ['template', 'theme', 'placement', 'direction', 'layer', 'location'];
 Drop.instances.after.update(function(userId, doc, fieldNames, modifier, options) {
     for (var k in keys) {
         if (this.previous[keys[k]] != doc[keys[k]]) {
