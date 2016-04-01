@@ -16,6 +16,7 @@ Drop = function(data) {
 Drop._theme = 'DropDefault';
 Drop._template = 'DropDefaultTemplate';
 Drop._momentum = 'dimentum';
+Drop._reinit = ['template', 'theme', 'placement', 'direction', 'layer', 'location', 'arrow'];
 
 // It recalculates the position of drop, and merge old data with new data.
 // drop.tick(data?: Data) => Drop
@@ -104,7 +105,7 @@ Drop.prototype.generateInstance = function() {
     var instance = this.data.instance();
     var result = {};
     // Reactive drop states
-    lodash.each(['template', 'theme', 'placement', 'direction', 'layer', 'location'], (key) => {
+    lodash.each(Drop._reinit, (key) => {
         if (key in this.data) {
             result[key] = this.data[key];
             if (instance && result[key] != instance[key]) result.prepare = true;

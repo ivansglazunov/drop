@@ -34,7 +34,9 @@ Drop.instances.attachSchema(new SimpleSchema({
         autoValue: function() {
             if (this.isInsert) return true;
         }
-    }
+    },
+    
+    arrow: { type: Boolean, optional: true, defaultValue: true }
 }));
 
 Drop.instances.helpers({
@@ -59,10 +61,9 @@ Drop.instances.before.update(function(userId, doc, fieldNames, modifier, options
     }
 });
 
-var keys = ['template', 'theme', 'placement', 'direction', 'layer', 'location'];
 Drop.instances.after.update(function(userId, doc, fieldNames, modifier, options) {
-    for (var k in keys) {
-        if (this.previous[keys[k]] != doc[keys[k]]) {
+    for (var k in Drop._reinit) {
+        if (this.previous[Drop._reinit[k]] != doc[Drop._reinit[k]]) {
             Drop.instances._transform(doc).drop().hide().show();
             break;
         }

@@ -58,7 +58,7 @@ Drop custom variables and drop options context.
 
 System variables:
 
-* `anchor: DOMELement` required link to anchor
+* `anchor: DOMELement` required link to anchor (automatically on template usage)
 * `trigger: String` the trigger is activated automatically only when using [Template.Drop](#templatedrop)
 * `template?: String = 'DropDefaultTemplate'` template of this drop
 * `content?: Template` template passed into template with [Template.Drop](#templatedrop) `{{else}}` block
@@ -152,7 +152,23 @@ Standard independent `theme` template of drop.
 ### Template.DropBootstrap
 The `theme` template uses Bootstrap classes.
 
+### Template.DropClose
+Microtemplate for fast create close buttons.
+
+```html
+{{#DropHide instance}}
+    <button class="btn btn-danger btn-xs">x</button>
+{{/DropHide}}
+```
+
 ## Versions
+
+### 0.3.0
+* No timeouts and intervals!
+* [https://github.com/meteor-templ/drop/issues/15](Close microtemplate)
+* [https://github.com/meteor-templ/drop/issues/13](Arrow control)
+* [https://github.com/meteor-templ/drop/issues/12](Positioning within the theme)
+* `calc` renamed to `generateInstance`
 
 ### 0.2.5
 * Fix `hover`
