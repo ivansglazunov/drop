@@ -8,7 +8,7 @@ Template.DropCore.onRendered(function() {
 });
 
 Template.DropCore.onDestroyed(function() {
-    if (this.data.__drop) this.data.__drop.hide();
+    if (this.data.data.__drop) this.data.data.__drop.hide();
 });
 
 Template.Drop.helpers({
