@@ -1,7 +1,7 @@
 Package.describe({
   name: 'templ:drop',
-  version: '0.3.2',
-  summary: 'Dropdowns, dropmenus, tooltips as templates.',
+  version: '0.3.3',
+  summary: 'Realy fully customizable, and reactive drops, dropdowns, tooltips and dropmenus for Meteor.',
   git: 'https://github.com/meteor-templ/drop',
   documentation: 'README.md'
 });
@@ -13,7 +13,6 @@ Package.onUse(function(api) {
   api.use('ecmascript');
   api.use('templating');
   api.use('less');
-  api.use('check');
   api.use('random');
   
   api.use('stevezhu:lodash@4.6.1');

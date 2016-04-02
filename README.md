@@ -163,6 +163,9 @@ Microtemplate for fast create close buttons.
 
 ## Versions
 
+### 0.3.2
+* Remove `check`
+
 ### 0.3.0
 * No timeouts and intervals!
 * [https://github.com/meteor-templ/drop/issues/15](Close microtemplate)
